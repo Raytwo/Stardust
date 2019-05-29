@@ -8,8 +8,8 @@ WIP mod loader for Sonic Mania Switch (v1.04)
 - Go to /atmosphere/titles/01009AA000FAA000/exefs/ and put your generated subsdk1 and the patched NPDM file in that directory.
 
 ### Credits and Special thanks
-The contributors of [Starlight](https://github.com/shadowninja108/Starlight) (in particular shadowninja108 for putting up with my questions)
-[Thog](https://github.com/Thog): ModuleObject reimplementation.
-[ShinyQuagsire](https://github.com/shinyquagsire23): SaltyNX code.
-[jugeeya](https://github.com/jugeeya): For hints and assistance figuring out ASLR.
-misson20000, jakibaki: Answering some of my questions.
+The contributors of [Starlight](https://github.com/shadowninja108/Starlight) (in particular shadowninja108 for putting up with my questions)  
+[Thog](https://github.com/Thog): ModuleObject reimplementation.  
+[ShinyQuagsire](https://github.com/shinyquagsire23): SaltyNX code.  
+[jugeeya](https://github.com/jugeeya): For hints and assistance figuring out ASLR.  
+misson20000, jakibaki: Answering some of my questions.  
