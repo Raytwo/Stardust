@@ -1,0 +1,8 @@
+%rename link                old_link
+
+*link:
+%(old_link) -T ../syms.ld -T ../switch.ld -pie -z text -z nodynamic-undefined-weak --build-id=sha1
+
+*startfile:
+crti%O%s crtbegin%O%s
+
