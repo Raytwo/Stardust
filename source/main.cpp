@@ -10,6 +10,9 @@ u64 BASEADDR;
 #define FunctionPointer(RETURN_TYPE, NAME, ARGS, ADDRESS) \
 RETURN_TYPE (*NAME)ARGS = (RETURN_TYPE (*)ARGS)ADDRESS + BASEADDR
 
+#define DataPointer(type, name, address) \
+type &name = *(type *)(address + BASEADDR)
+
 //Stardust's address relative to main: 0x22E4000
 //Stardust's address relative to subsdk0: 0xA89000‬
 
@@ -63,7 +66,8 @@ Result stardustInit() {
     FunctionPointer(s64, openOnlineManual, (), 0x2808d8);
     result = openOnlineManual();
     Logger::Log("Return value from openOnlineManual: 0x%08X\n", result);
-
+    DataPointer(char, dunno, 0x432408);
+    Logger::Log("Value of dunno: %d\n", dunno);
     return 0;
 }
 
