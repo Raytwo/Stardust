@@ -34,7 +34,7 @@ namespace nn
         Result GetFileSize(s64* size, nn::fs::FileHandle);
         Result GetFileOpenMode(nn::fs::FileHandle handle);
         Result CreateFile(char const* filepath, s64 size, int flags);
-        //Uses the 3 last bit of the value to determine file permissions? xyz, x = append, y = write, z = read
+        //Uses the 3 last bit of the "mode" value to determine file permissions. 00000XYZ -> X = append, Y = write, Z = read
         Result OpenFile(nn::fs::FileHandle*, char const* path, s32 mode);
         Result WriteFile(nn::fs::FileHandle handle, long position, void const* buffer, unsigned long size, WriteOption const &option);
 

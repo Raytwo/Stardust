@@ -5,18 +5,18 @@
 
 __attribute__((section(".bss"))) rtld::ModuleObject __nx_module_runtime;
 
+u64 BASEADDR;
+
 #define FunctionPointer(RETURN_TYPE, NAME, ARGS, ADDRESS) \
-RETURN_TYPE (*NAME)ARGS = (RETURN_TYPE (*)ARGS)ADDRESS + ANCHOR_ABS 
+RETURN_TYPE (*NAME)ARGS = (RETURN_TYPE (*)ARGS)ADDRESS + BASEADDR
 
 //Stardust's address relative to main: 0x22E4000
 //Stardust's address relative to subsdk0: 0xA89000‬
 
-u64 ANCHOR_ABS;
-
-u64 getCodeStart()
+u64 getBaseAddress()
 {
-    if (ANCHOR_ABS)
-        return ANCHOR_ABS;
+    if (BASEADDR)
+        return BASEADDR;
 
     u64 addr = 0;
     while (1)
@@ -37,7 +37,7 @@ u64 getCodeStart()
         if (!addr || ret) break;
     }
     
-    ANCHOR_ABS = addr;
+    BASEADDR = addr;
     return addr;
 }
 
@@ -70,7 +70,7 @@ Result stardustInit() {
 //Current hook entrypoint: 0x2983b0
 int main()
 {
-    getCodeStart();
+    getBaseAddress();
 
     if(stardustInit())
         return -1;
