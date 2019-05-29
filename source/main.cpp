@@ -42,9 +42,10 @@ u64 getCodeStart()
     return addr;
 }
 
+//Mount the SDMC 
 Result stardustInit() {
     Result result;
-    
+    const char* tebi = "penis";
     //Check if the SD card is accessible
     nn::fs::IsSdCardAccessible();
     //Mount the SD card
