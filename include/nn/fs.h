@@ -39,8 +39,9 @@ namespace nn
         Result WriteFile(nn::fs::FileHandle handle, long position, void const* buffer, unsigned long size, WriteOption const &option);
 
         // SD
-        Result MountSdCard(char const *);
         bool IsSdCardInserted();
         bool IsSdCardAccessible();
+        Result MountSdCard(char const *);
+        Result Unmount(char const*);
     };
 };

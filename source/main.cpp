@@ -25,11 +25,10 @@ u64 getCodeStart()
         u32 pageinfo;
         Result ret = svcQueryMemory(&info, &pageinfo, addr);
         
+        //Check if we found the main code region. Yes, this is terrible. Deal with it.
         if (info.size == 0x0034A000 && info.perm == Perm_Rx)
         {
             addr = info.addr;
-            Logger::Log("getCodeStart addr: 0x%08X\n", info.addr);
-            Logger::Log("getCodeStart size: 0x%08X\n", info.size);
             break;
         }
 
@@ -45,26 +44,38 @@ u64 getCodeStart()
 //Mount the SDMC 
 Result stardustInit() {
     Result result;
-    const char* tebi = "penis";
+
     //Check if the SD card is accessible
-    nn::fs::IsSdCardAccessible();
+    if(!nn::fs::IsSdCardAccessible())
+        return -1; //We can't work without the SD.
+
     //Mount the SD card
-    nn::fs::MountSdCard("sdmc");
+    if(nn::fs::MountSdCard("sdmc"))
+        return -1; //The application doesn't have its permissions patched for SDCard access.
+
     //Create our working directory
-    result = nn::fs::CreateDirectory("sdmc:/Stardust/");
+    nn::fs::CreateDirectory("sdmc:/Stardust/");
+
+    //Have the Logger create the logging file if it doesn't exist and use it.
     Logger::Initialize("sdmc:/Stardust/debug.log");
-    Logger::Log("Result from CreateDirectory: 0x%04X\n", result);
-    result = getCodeStart();
+
+    //Call a method from the game as a PoC
     FunctionPointer(s64, openOnlineManual, (), 0x2808d8);
     result = openOnlineManual();
     Logger::Log("Return value from openOnlineManual: 0x%08X\n", result);
+
     return 0;
 }
 
 //Current hook entrypoint: 0x2983b0
 int main()
 {
-    stardustInit();
+    getCodeStart();
+
+    if(stardustInit())
+        return -1;
+
+    nn::fs::Unmount("sdmc");
     return 0;
 }
 
