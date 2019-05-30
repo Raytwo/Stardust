@@ -10,6 +10,9 @@ u64 BASEADDR;
 #define FunctionPointer(RETURN_TYPE, NAME, ARGS, ADDRESS) \
 RETURN_TYPE (*NAME)ARGS = (RETURN_TYPE (*)ARGS)ADDRESS + BASEADDR
 
+#define OffsetFunctionPointer(RETURN_TYPE, NAME, ARGS, ADDRESS) \
+RETURN_TYPE (*NAME)ARGS = *(RETURN_TYPE (**)ARGS)(ADDRESS + BASEADDR)
+
 #define DataPointer(type, name, address) \
 type &name = *(type *)(address + BASEADDR)
 
@@ -44,6 +47,7 @@ u64 getBaseAddress()
     return addr;
 }
 
+
 //Mount the SDMC 
 Result stardustInit() {
     Result result;
@@ -62,12 +66,10 @@ Result stardustInit() {
     //Have the Logger create the logging file if it doesn't exist and use it.
     Logger::Initialize("sdmc:/Stardust/debug.log");
 
-    //Call a method from the game as a PoC
+    //Create a function pointer using a method from the game as a PoC
     FunctionPointer(s64, openOnlineManual, (), 0x2808d8);
-    result = openOnlineManual();
-    Logger::Log("Return value from openOnlineManual: 0x%08X\n", result);
-    DataPointer(char, dunno, 0x432408);
-    Logger::Log("Value of dunno: %d\n", dunno);
+    DataPointer(s32, music_volume, 0xf596e8);
+    DataPointer(s32, sfx_volume, 0xf596eC);
     return 0;
 }
 
