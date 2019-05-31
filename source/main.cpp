@@ -1,57 +1,18 @@
 #include <switch.h>
 #include "ModuleObject.hpp"
 #include "nn/fs.h"
+#include "MemHelpers.h"
 #include "logger.h"
 
 __attribute__((section(".bss"))) rtld::ModuleObject __nx_module_runtime;
 
-u64 BASEADDR;
-
-#define FunctionPointer(RETURN_TYPE, NAME, ARGS, ADDRESS) \
-RETURN_TYPE (*NAME)ARGS = (RETURN_TYPE (*)ARGS)ADDRESS + BASEADDR
-
-#define OffsetFunctionPointer(RETURN_TYPE, NAME, ARGS, ADDRESS) \
-RETURN_TYPE (*NAME)ARGS = *(RETURN_TYPE (**)ARGS)(ADDRESS + BASEADDR)
-
-#define DataPointer(type, name, address) \
-type &name = *(type *)(address + BASEADDR)
-
 //Stardust's address relative to main: 0x22E4000
 //Stardust's address relative to subsdk0: 0xA89000‬
-
-u64 getBaseAddress()
-{
-    if (BASEADDR)
-        return BASEADDR;
-
-    u64 addr = 0;
-    while (1)
-    {
-        MemoryInfo info;
-        u32 pageinfo;
-        Result ret = svcQueryMemory(&info, &pageinfo, addr);
-        
-        //Check if we found the main code region. Yes, this is terrible. Deal with it.
-        if (info.size == 0x0034A000 && info.perm == Perm_Rx)
-        {
-            addr = info.addr;
-            break;
-        }
-
-        addr = info.addr + info.size;
-
-        if (!addr || ret) break;
-    }
-    
-    BASEADDR = addr;
-    return addr;
-}
-
 
 //Mount the SDMC 
 Result stardustInit() {
     Result result;
-
+    u64 pid;
     //Check if the SD card is accessible
     if(!nn::fs::IsSdCardAccessible())
         return -1; //We can't work without the SD.
@@ -67,9 +28,13 @@ Result stardustInit() {
     Logger::Initialize("sdmc:/Stardust/debug.log");
 
     //Create a function pointer using a method from the game as a PoC
+    
     FunctionPointer(s64, openOnlineManual, (), 0x2808d8);
     DataPointer(s32, music_volume, 0xf596e8);
     DataPointer(s32, sfx_volume, 0xf596eC);
+    //openOnlineManual();
+    //Logger::Log("Address: 0x%08X\n", *openOnlineManual);
+    GetCurrentProcessHandle();
     return 0;
 }
 
