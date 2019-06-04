@@ -81,10 +81,9 @@ static Result GetCurrentProcessHandle() {
         struct {
             u64 magic;
             u64 result;
-            u32 handle;
         } *resp = r.Raw;
 
-        ret = resp->handle;
+        ret = r.Handles[0];
         Logger::Log("Process handle hopefully: 0x%08X\n", ret);
     }
 
