@@ -12,4 +12,5 @@ The contributors of [Starlight](https://github.com/shadowninja108/Starlight) (in
 [Thog](https://github.com/Thog): ModuleObject reimplementation.  
 [ShinyQuagsire](https://github.com/shinyquagsire23): SaltyNX code.  
 [jugeeya](https://github.com/jugeeya): For hints and assistance figuring out ASLR.  
-ReSwitched(misson20000, jakibaki, SciresM, leoetlino): Answering some of my questions and helping me deal with threads.  
+[misson20000](https://github.com/misson20000): For his help with threads, IPC and nnSDK stuff.
+ReSwitched(jakibaki, SciresM, leoetlino): Answering some of my questions and helping me deal with threads.  
