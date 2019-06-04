@@ -5,7 +5,7 @@
 namespace nn {
     namespace svc {
         struct Handle{
-            void *handle;
+            u32 handle;
         };
     };
 

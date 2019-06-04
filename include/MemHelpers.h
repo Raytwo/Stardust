@@ -55,7 +55,39 @@ static Result GetCurrentProcessHandle() {
     nn::sf::hipc::FinalizeHipcServiceResolution();
     Logger::Log("pmdmntHandle value before: 0x%08X\n", pmdmntHandle);
 
-    
+    IpcCommand c;
+    ipcInitialize(&c);
+
+    struct {
+        u64 magic;
+        u64 cmd_id;
+        u64 pid;
+    } *raw;
+
+    raw = ipcPrepareHeader(&c, sizeof(*raw));
+    raw->magic = SFCI_MAGIC;
+    raw->cmd_id = 65000;
+    raw->pid = GetPID();
+
+    //dirty but oh well
+    Service tmp;
+    tmp.handle = pmdmntHandle.handle;
+    ret = serviceIpcDispatch(&tmp);
+
+    if(R_SUCCEEDED(ret)) {
+        IpcParsedCommand r;
+        ipcParse(&r);
+
+        struct {
+            u64 magic;
+            u64 result;
+            u32 handle;
+        } *resp = r.Raw;
+
+        ret = resp->handle;
+        Logger::Log("Process handle hopefully: 0x%08X\n", ret);
+    }
+
     return 0;
 }
 
