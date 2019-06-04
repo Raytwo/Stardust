@@ -14,7 +14,7 @@
 	"filesystem_access":	{
 		"permissions":	"0x4000000000200000"
 	},
-	"service_access":	["acc:u0", "aoc:u", "apm", "appletOE", "audin:u", "audout:u", "audren:u", "banana", "bcat:u", "bsd:u", "bsdcfg", "caps:su", "csrng", "friend:u", "fsp-srv", "hid", "htc", "htc:tenv", "htcs", "hwopus", "irs", "ldn:u", "ldr:ro", "lm", "mii:u", "mm:u", "nfc:mf:u", "nfc:user", "nfp:user", "nifm:u", "nsd:u", "ntc", "nvdrv", "pcm", "pctl", "pl:u", "prepo:u", "set", "sfdnsres", "ssl", "time:u", "vi:u"],
+	"service_access":	["acc:u0", "aoc:u", "apm", "appletOE", "audin:u", "audout:u", "audren:u", "banana", "bcat:u", "bsd:u", "bsdcfg", "caps:su", "csrng", "friend:u", "fsp-srv", "hid", "htc", "htc:tenv", "htcs", "hwopus", "irs", "ldn:u", "ldr:ro", "lm", "mii:u", "mm:u", "nfc:mf:u", "nfc:user", "nfp:user", "nifm:u", "nsd:u", "ntc", "nvdrv", "pcm", "pctl", "pl:u", "pm:dmnt","prepo:u", "set", "sfdnsres", "ssl", "time:u", "vi:u"],
 	"service_host":	[],
 	"kernel_capabilities":	[{
 			"type":	"kernel_flags",

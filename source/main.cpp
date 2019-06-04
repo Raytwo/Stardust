@@ -42,6 +42,7 @@ Result stardustInit() {
 int main()
 {
     getBaseAddress();
+    GetPID();
 
     if(stardustInit())
         return -1;
