@@ -28,16 +28,17 @@ Result stardustInit() {
     Logger::Initialize("sdmc:/Stardust/debug.log");
 
     //Create a function pointer using a method from the game as a PoC
-    
     FunctionPointer(s64, openOnlineManual, (), 0x2808d8);
+
     DataPointer(s32, music_volume, 0xf596e8);
     DataPointer(s32, sfx_volume, 0xf596eC);
-    //openOnlineManual();
-    //Logger::Log("Address: 0x%08X\n", *openOnlineManual);
+
     u64 pHandle = GetCurrentProcessHandle();
-    result = svcSetProcessMemoryPermission(pHandle, BASEADDR, 0x0034A000, Perm_Rw);
-    Logger::Log("svcMapProcessMemory return value: 0x%08X\n", result);
-    result = svcSetProcessMemoryPermission(pHandle, BASEADDR, 0x0034A000, Perm_Rx);
+    result = svcSetProcessMemoryPermission(pHandle, BASEADDR, 0x34A000, Perm_Rw);
+    Logger::Log("svcSetProcessMemoryPermission return value: 0x%08X\n", result);
+    result = svcSetProcessMemoryPermission(pHandle, BASEADDR, 0x34A000, Perm_Rx);
+    Logger::Log("svcSetProcessMemoryPermission return value: 0x%08X\n", result);
+
     return 0;
 }
 
