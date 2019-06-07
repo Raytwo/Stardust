@@ -1,4 +1,3 @@
-#include <switch.h>
 #include "ModuleObject.hpp"
 #include "nn/fs.h"
 #include "MemHelpers.h"
@@ -12,7 +11,7 @@ __attribute__((section(".bss"))) rtld::ModuleObject __nx_module_runtime;
 //Mount the SDMC 
 Result stardustInit() {
     Result result;
-    u64 pid;
+
     //Check if the SD card is accessible
     if(!nn::fs::IsSdCardAccessible())
         return -1; //We can't work without the SD.
@@ -27,17 +26,13 @@ Result stardustInit() {
     //Have the Logger create the logging file if it doesn't exist and use it.
     Logger::Initialize("sdmc:/Stardust/debug.log");
 
-    //Create a function pointer using a method from the game as a PoC
-    FunctionPointer(s64, openOnlineManual, (), 0x2808d8);
-
+    //Defines pointers to those variables
     DataPointer(s32, music_volume, 0xf596e8);
     DataPointer(s32, sfx_volume, 0xf596eC);
 
-    u64 pHandle = GetCurrentProcessHandle();
-    result = svcSetProcessMemoryPermission(pHandle, BASEADDR, 0x34A000, Perm_Rw);
-    Logger::Log("svcSetProcessMemoryPermission return value: 0x%08X\n", result);
-    result = svcSetProcessMemoryPermission(pHandle, BASEADDR, 0x34A000, Perm_Rx);
-    Logger::Log("svcSetProcessMemoryPermission return value: 0x%08X\n", result);
+    //Create a function pointer using a method from the game as a PoC
+    FunctionPointer(s64, openOnlineManual, (), 0x2808d8);
+    openOnlineManual();
 
     return 0;
 }

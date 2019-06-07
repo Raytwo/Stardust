@@ -9,6 +9,11 @@ namespace nn {
   typedef u128 TimeSpan; //This doesn't work so far, don't mind it.
 
   namespace os {
+    typedef s32 MemoryPermission;
+
+    namespace detail {
+        Result SetMemoryPermission(u64, u64, nn::os::MemoryPermission);
+    };
 
     typedef struct ThreadType { uint8_t x[0x1D0]; } ThreadType;
 
