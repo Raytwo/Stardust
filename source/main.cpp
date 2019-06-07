@@ -34,7 +34,10 @@ Result stardustInit() {
     DataPointer(s32, sfx_volume, 0xf596eC);
     //openOnlineManual();
     //Logger::Log("Address: 0x%08X\n", *openOnlineManual);
-    GetCurrentProcessHandle();
+    u64 pHandle = GetCurrentProcessHandle();
+    result = svcSetProcessMemoryPermission(pHandle, BASEADDR, 0x0034A000, Perm_Rw);
+    Logger::Log("svcMapProcessMemory return value: 0x%08X\n", result);
+    result = svcSetProcessMemoryPermission(pHandle, BASEADDR, 0x0034A000, Perm_Rx);
     return 0;
 }
 

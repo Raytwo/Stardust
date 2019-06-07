@@ -20,40 +20,21 @@ RETURN_TYPE (*NAME)ARGS = *(RETURN_TYPE (**)ARGS)(ADDRESS + BASEADDR)
 #define DataPointer(type, name, address) \
 type &name = *(type *)(address + BASEADDR)
 
-static Result GetPID()
+static u64 GetPID()
 {
     u64 pid = 0;
     svcGetProcessId(&pid, CUR_PROCESS_HANDLE);
     return pid;
 }
 
-void serverThread() {
-    testVar = 50;
-    return;
-}
-
 static Result GetCurrentProcessHandle() {
     Result ret = 0;
-    //Handle client, server;
-    nn::os::ThreadType thread;
     nn::svc::Handle pmdmntHandle;
 
-    FunctionPointer(void*, memalign_0, (size_t, size_t), 0x0348238);
-
-    stack = memalign_0(0x1000, 0x1000);
-    //ret = svcCreateSession(&server, &client, 0, 0);
-    ret = nn::os::CreateThread(&thread, &serverThread, NULL, stack, 0x1000, 0, 2);
-    Logger::Log("svcCreateThread result: 0x%08X\n", ret);
-    ret = nn::os::StartThread(&thread);
-    Logger::Log("svcStartThread result: 0x%08X\n", ret);
-    nn::os::WaitThread(&thread);
-    Logger::Log("TestVar value: 0x%08X\n", testVar);
-    Logger::Log("pmdmntHandle value before: 0x%08X\n", pmdmntHandle);
     nn::sf::hipc::InitializeHipcServiceResolution();
-    ret = nn::sf::hipc::ConnectToHipcService(&pmdmntHandle, "pm:dmnt");
-    Logger::Log("ConnectToHipcService result: 0x%08X\n", ret);
+    nn::sf::hipc::ConnectToHipcService(&pmdmntHandle, "pm:dmnt");
     nn::sf::hipc::FinalizeHipcServiceResolution();
-    Logger::Log("pmdmntHandle value before: 0x%08X\n", pmdmntHandle);
+
 
     IpcCommand c;
     ipcInitialize(&c);
@@ -83,11 +64,16 @@ static Result GetCurrentProcessHandle() {
             u64 result;
         } *resp = r.Raw;
 
-        ret = r.Handles[0];
-        Logger::Log("Process handle hopefully: 0x%08X\n", ret);
+        ret = resp->result;
+
+        if(R_SUCCEEDED(ret)) {
+            ret = r.Handles[0];
+            Logger::Log("Obtained handle: 0x%08X\n", ret);
+            return ret;
+        }
     }
 
-    return 0;
+    return -1;
 }
 
 u64 getBaseAddress()

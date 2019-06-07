@@ -78,7 +78,9 @@
 				"svcCreateSession":		"0x40",
 				"svcAcceptSession":		"0x41",
 				"svcReplayAndReceive":	"0x43",
-				"svcFlushProcessDataCache":	"0x5f"
+				"svcFlushProcessDataCache":	"0x5f",
+				"svcSetProcessMemoryPermission": "0x73",
+				"svcMapProcessMemory": "0x74"
 			}
 		}, {
 			"type":	"application_type",
