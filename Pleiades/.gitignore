@@ -1,0 +1,7 @@
+# Don't push this folder as it contains unnecessary files 
+**/build
+# Don't push the binaries
+*.elf
+*.npdm
+*.nso
+*.nsp
