@@ -32,6 +32,9 @@ Result stardustInit() {
 
     //Create a function pointer using a method from the game as a PoC
     FunctionPointer(s64, openOnlineManual, (), 0x2808d8);
+
+    Logger::Log("BASEADDR value: 0x%08X\n", BASEADDR);
+    Logger::Log("openOnlineManual offset: 0x%08X\n", openOnlineManual);
     openOnlineManual();
 
     return 0;
@@ -42,8 +45,7 @@ int main()
 {
     getBaseAddress();
 
-    if(stardustInit())
-        return -1;
+    stardustInit();
 
     nn::fs::Unmount("sdmc");
     return 0;
