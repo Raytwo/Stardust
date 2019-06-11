@@ -37,6 +37,11 @@ void __attribute__((weak)) __appInit(void)
     if (R_FAILED(rc))
         fatalSimple(MAKERESULT(Module_Libnx, LibnxError_InitFail_SM));
 
+    for (int i = 0; i < 7; i++)
+    {
+        svcSleepThread(1*1000*1000*1000);
+    }
+
     rc = fsInitialize();
     if (R_FAILED(rc))
         fatalSimple(MAKERESULT(Module_Libnx, LibnxError_InitFail_FS));
