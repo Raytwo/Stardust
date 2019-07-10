@@ -1,6 +1,5 @@
 # Don't push this folder as it contains unnecessary files 
 **/build
-*/libstratosphere
 # Don't push the binaries
 *.elf
 *.npdm
