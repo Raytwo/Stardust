@@ -35,7 +35,14 @@ Result stardustInit() {
 
     Logger::Log("BASEADDR value: 0x%08X\n", BASEADDR);
     Logger::Log("openOnlineManual offset: 0x%08X\n", openOnlineManual);
-    openOnlineManual();
+
+    nn::svc::Handle pleiades;
+
+    nn::sf::hipc::InitializeHipcServiceResolution();
+    result = nn::sf::hipc::ConnectToHipcService(&pleiades, "pleiades");
+    nn::sf::hipc::FinalizeHipcServiceResolution();
+    Logger::Log("ConnectToHipcService result: 0x%08X\n", result);
+    //openOnlineManual();
 
     return 0;
 }

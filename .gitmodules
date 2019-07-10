@@ -1,0 +1,3 @@
+[submodule "Pleiades/libstratosphere"]
+	path = Pleiades/libstratosphere
+	url = https://github.com/Atmosphere-NX/libstratosphere
