@@ -12,7 +12,7 @@
 	"is_64_bit":	true,
 	"address_space_type":	3,
 	"filesystem_access":	{
-		"permissions":	"0xffffffffffffffff"
+		"permissions":	"0x4000000000200000"
 	},
 	"service_access":	["acc:u0", "aoc:u", "apm", "appletOE", "audin:u", "audout:u", "audren:u", "banana", "bcat:u", "bsd:u", "bsdcfg", "caps:su", "csrng", "friend:u", "fsp-srv", "hid", "htc", "htc:tenv", "htcs", "hwopus", "irs", "ldn:u", "ldr:ro", "lm", "mii:u", "mm:u", "nfc:mf:u", "nfc:user", "nfp:user", "nifm:u", "nsd:u", "ntc", "nvdrv", "pcm", "pctl", "pl:u", "pleiades", "pm:dmnt","prepo:u", "set", "sfdnsres", "ssl", "time:u", "vi:u"],
 	"service_host":	[],
@@ -78,9 +78,7 @@
 				"svcCreateSession":		"0x40",
 				"svcAcceptSession":		"0x41",
 				"svcReplyAndReceive":	"0x43",
-				"svcFlushProcessDataCache":	"0x5f",
-				"svcSetProcessMemoryPermission": "0x73",
-				"svcMapProcessMemory": "0x74"
+				"svcFlushProcessDataCache":	"0x5f"
 			}
 		}, {
 			"type":	"application_type",

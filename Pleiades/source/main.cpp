@@ -28,6 +28,7 @@ void  __appInit(void)
 {
     SetFirmwareVersionForLibnx();
 
+    //We might eventually use this for logging
     DoWithSmSession([&]() {
         R_ASSERT(fsInitialize());
     });
@@ -44,8 +45,9 @@ void  __appExit(void)
 int main(int argc, char* argv[])
 {
     static auto s_server_manager = WaitableManager(1);
+    //Get the Pleiades server running and allow for 4 sessions (You'll probably never need more than 1)
     s_server_manager.AddWaitable(new ServiceServer<Pleiades>("pleiades", 4));
-    
+
     s_server_manager.Process();
 
     return 0;

@@ -40,8 +40,39 @@ Result stardustInit() {
 
     nn::sf::hipc::InitializeHipcServiceResolution();
     result = nn::sf::hipc::ConnectToHipcService(&pleiades, "pleiades");
-    nn::sf::hipc::FinalizeHipcServiceResolution();
     Logger::Log("ConnectToHipcService result: 0x%08X\n", result);
+
+    Service plei;
+    plei.handle = pleiades.handle;
+    Result rc;
+    IpcCommand c;
+    ipcInitialize(&c);
+
+    struct {
+        u64 magic;
+        u64 cmd_id;
+    } *raw;
+
+    raw = ipcPrepareHeader(&c, sizeof(*raw));
+    raw->magic = SFCI_MAGIC;
+    raw->cmd_id = 0;
+
+    rc = serviceIpcDispatch(&plei);
+
+    if(R_SUCCEEDED(rc)) {
+        IpcParsedCommand r;
+        ipcParse(&r);
+
+        struct
+        {
+            u64 magic;
+            u64 result;
+            u32 value;
+        } *resp = r.Raw;
+
+        Logger::Log("[Cmd 0] GetArbitraryValue result: 0x%08X\n", resp->value);        
+    }
+    nn::sf::hipc::FinalizeHipcServiceResolution();
     //openOnlineManual();
 
     return 0;
