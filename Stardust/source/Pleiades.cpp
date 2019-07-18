@@ -21,8 +21,7 @@ Result pleiadesInitialize(void)
 	return ret;
 }
 
-Result pleiadesWriteBranch(u64 dest, u64 func)
-{
+Result pleiadesWriteBranch(u64 write_address, u64 dest){
 	Result rc;
     IpcCommand c;
     ipcInitialize(&c);
@@ -30,16 +29,16 @@ Result pleiadesWriteBranch(u64 dest, u64 func)
     struct {
         u64 magic;
         u64 cmd_id;
+        u64 write_addr;
         u64 dest;
-        u64 func_addr;
         u64 pid;
     } *raw;
 
     raw = ipcPrepareHeader(&c, sizeof(*raw));
     raw->magic = SFCI_MAGIC;
     raw->cmd_id = 2;
+    raw->write_addr = write_address;
     raw->dest = dest;
-    raw->func_addr = func;
     raw->pid = getPID();
 
     rc = serviceIpcDispatch(&g_pleiades);
@@ -60,7 +59,7 @@ Result pleiadesWriteBranch(u64 dest, u64 func)
     return -1;
 }
 
-Result pleiadesWriteBranchLink(u64 dest, u64 func)
+Result pleiadesWriteBranchLink(u64 write_address, u64 dest)
 {
 	Result rc;
     IpcCommand c;
@@ -69,16 +68,16 @@ Result pleiadesWriteBranchLink(u64 dest, u64 func)
     struct {
         u64 magic;
         u64 cmd_id;
+        u64 write_addr;
         u64 dest;
-        u64 func_addr;
         u64 pid;
     } *raw;
 
     raw = ipcPrepareHeader(&c, sizeof(*raw));
     raw->magic = SFCI_MAGIC;
     raw->cmd_id = 3;
+    raw->write_addr = write_address;
     raw->dest = dest;
-    raw->func_addr = func;
     raw->pid = getPID();
 
     rc = serviceIpcDispatch(&g_pleiades);
