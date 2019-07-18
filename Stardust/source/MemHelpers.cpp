@@ -1,6 +1,16 @@
 #include "MemHelpers.h"
 
-u64 BASEADDR = 0;
+static u64 BASEADDR = 0;
+
+//Doesn't work globally for now
+#define FunctionPointer(RETURN_TYPE, NAME, ARGS, ADDRESS) \
+RETURN_TYPE (*NAME)ARGS = (RETURN_TYPE (*)ARGS)ADDRESS + BASEADDR
+
+#define OffsetFunctionPointer(RETURN_TYPE, NAME, ARGS, ADDRESS) \
+RETURN_TYPE (*NAME)ARGS = *(RETURN_TYPE (**)ARGS)ADDRESS + BASEADDR
+
+#define DataPointer(type, name, address) \
+type &name = *(type *)(address + BASEADDR)
 
 u64 getPID()
 {

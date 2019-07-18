@@ -9,6 +9,8 @@ __attribute__((section(".bss"))) rtld::ModuleObject __nx_module_runtime;
 //Stardust's address relative to main: 0x22E4000
 //Stardust's address relative to subsdk0: 0xA89000‬
 
+static u64 BASEADDR = getBaseAddress();;
+
 //Mount the SDMC 
 Result stardustInit()
 {
@@ -35,11 +37,9 @@ Result stardustInit()
     //Create a function pointer using a method from the game as a PoC
     FunctionPointer(s64, openOnlineManual, (), 0x2808d8);
 
-    Logger::Log("BASEADDR value: 0x%08X\n", BASEADDR);
-    Logger::Log("openOnlineManual offset: 0x%08X\n", openOnlineManual);
-
-    pleiadesInitialize();
-    pleiadesWriteBranch(BASEADDR + 0x280900, BASEADDR + 0x280914);
+    pleiadesInitialize(getBaseAddress());
+    //Crappy branch instruction patching to test the function
+    pleiadesWriteBranch(0x280900, 0x280914);
 
     //openOnlineManual();
 
@@ -49,8 +49,6 @@ Result stardustInit()
 //Current hook entrypoint: 0x2983b0
 int main()
 {
-    getBaseAddress();
-
     stardustInit();
 
     nn::fs::Unmount("sdmc");

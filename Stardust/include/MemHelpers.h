@@ -8,8 +8,6 @@
 #define CUR_PROCESS_HANDLE 0xFFFF8001
 #define CUR_THREAD_HANDLE 0xFFFF8000
 
-extern u64 BASEADDR;
-
 //Doesn't work globally for now
 #define FunctionPointer(RETURN_TYPE, NAME, ARGS, ADDRESS) \
 RETURN_TYPE (*NAME)ARGS = (RETURN_TYPE (*)ARGS)ADDRESS + BASEADDR

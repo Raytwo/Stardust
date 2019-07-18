@@ -4,8 +4,9 @@
 #include "MemHelpers.h"
 
 static Service g_pleiades;
+static u64 BASEADDR;
 
-Result pleiadesInitialize(void) 
+Result pleiadesInitialize(u64 base_address) 
 {
 	if(serviceIsActive(&g_pleiades))
 		return 0;
@@ -18,10 +19,16 @@ Result pleiadesInitialize(void)
 	g_pleiades.handle = pleiades.handle;
 	nn::sf::hipc::FinalizeHipcServiceResolution();
 
+	BASEADDR = base_address;
+
 	return ret;
 }
 
-Result pleiadesWriteBranch(u64 write_address, u64 dest){
+Result pleiadesWriteBranch(u64 write_address, u64 dest)
+{
+	if(!BASEADDR)
+		return -1;
+
 	Result rc;
     IpcCommand c;
     ipcInitialize(&c);
@@ -37,8 +44,8 @@ Result pleiadesWriteBranch(u64 write_address, u64 dest){
     raw = ipcPrepareHeader(&c, sizeof(*raw));
     raw->magic = SFCI_MAGIC;
     raw->cmd_id = 2;
-    raw->write_addr = write_address;
-    raw->dest = dest;
+    raw->write_addr = BASEADDR + write_address;
+    raw->dest = BASEADDR + dest;
     raw->pid = getPID();
 
     rc = serviceIpcDispatch(&g_pleiades);
@@ -61,6 +68,9 @@ Result pleiadesWriteBranch(u64 write_address, u64 dest){
 
 Result pleiadesWriteBranchLink(u64 write_address, u64 dest)
 {
+	if(!BASEADDR)
+		return -1;
+
 	Result rc;
     IpcCommand c;
     ipcInitialize(&c);
@@ -76,8 +86,8 @@ Result pleiadesWriteBranchLink(u64 write_address, u64 dest)
     raw = ipcPrepareHeader(&c, sizeof(*raw));
     raw->magic = SFCI_MAGIC;
     raw->cmd_id = 3;
-    raw->write_addr = write_address;
-    raw->dest = dest;
+    raw->write_addr = BASEADDR + write_address;
+    raw->dest = BASEADDR + dest;
     raw->pid = getPID();
 
     rc = serviceIpcDispatch(&g_pleiades);
