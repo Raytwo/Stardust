@@ -13,7 +13,9 @@ Result Pleiades::GetArbitraryValue(Out<u32> number) {
 Result Pleiades::memcpy(u64 dest, u64 src, u64 size, u64 process_id) {
 	Result ret;
 	Handle debug;
+
 	ret = svcDebugActiveProcess(&debug, process_id);
+
 	if(!ret) {
 		void* tmp = malloc(0x1);
 		*((u8*)tmp) = 0x05;
@@ -21,7 +23,9 @@ Result Pleiades::memcpy(u64 dest, u64 src, u64 size, u64 process_id) {
 		*((u8*)tmp) = 0x14;
 		ret = svcWriteDebugProcessMemory(debug, tmp, dest+ 0x3, 0x1);
 	}
+
 	svcCloseHandle(debug);
+
 	return ResultSuccess;
 }
 
@@ -31,12 +35,11 @@ Result Pleiades::WriteBranch(u64 writeaddress, u64 funcaddress, u64 process_id) 
 	char instruction[4];
 
 	u32 relative = (s32)(funcaddress - (writeaddress + 0x4)) >> 2;
-	*(u32*)instruction = BRANCH_UNCONDITIONAL| (relative & 0x3FFFFFF);
+	*(u32*)instruction = BRANCH_UNCONDITIONAL | (relative & 0x3FFFFFF);
 
-	ret = svcDebugActiveProcess(&debug, process_id);
-	if(!ret) {
-		ret = svcWriteDebugProcessMemory(debug, instruction, writeaddress, sizeof(instruction));
-	}
+	R_TRY(svcDebugActiveProcess(&debug, process_id));
+	R_TRY(svcWriteDebugProcessMemory(debug, instruction, writeaddress, sizeof(instruction)));
+
 	svcCloseHandle(debug);
 
 	return ResultSuccess;
@@ -48,12 +51,12 @@ Result Pleiades::WriteBranchLink(u64 writeaddress, u64 funcaddress, u64 process_
 	char instruction[4];
 
 	u32 relative = (s32)(funcaddress - (writeaddress + 0x4)) >> 2;
-	*(u32*)instruction = BRANCH_LINK| (relative & 0x3FFFFFF);
+	*(u32*)instruction = BRANCH_LINK | (relative & 0x3FFFFFF);
 
-	ret = svcDebugActiveProcess(&debug, process_id);
-	if(!ret) {
-		ret = svcWriteDebugProcessMemory(debug, instruction, writeaddress, sizeof(instruction));
-	}
+	R_TRY(svcDebugActiveProcess(&debug, process_id));
+	R_TRY(svcWriteDebugProcessMemory(debug, instruction, writeaddress, sizeof(instruction)));
+
+
 	svcCloseHandle(debug);
 
 	return ResultSuccess;
