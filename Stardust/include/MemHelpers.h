@@ -10,7 +10,7 @@
 
 extern u64 BASEADDR;
 
-//Don't work globally for now
+//Doesn't work globally for now
 #define FunctionPointer(RETURN_TYPE, NAME, ARGS, ADDRESS) \
 RETURN_TYPE (*NAME)ARGS = (RETURN_TYPE (*)ARGS)ADDRESS + BASEADDR
 

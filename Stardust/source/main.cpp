@@ -51,11 +51,17 @@ Result stardustInit() {
     struct {
         u64 magic;
         u64 cmd_id;
+        u64 dest;
+        u64 func_addr;
+        u64 pid;
     } *raw;
 
     raw = ipcPrepareHeader(&c, sizeof(*raw));
     raw->magic = SFCI_MAGIC;
-    raw->cmd_id = 0;
+    raw->cmd_id = 2;
+    raw->dest = (BASEADDR + 0x280900); //Ptr
+    raw->func_addr = (BASEADDR + 0x280914);
+    raw->pid = getPID();
 
     rc = serviceIpcDispatch(&plei);
 
@@ -67,10 +73,9 @@ Result stardustInit() {
         {
             u64 magic;
             u64 result;
-            u32 value;
         } *resp = r.Raw;
 
-        Logger::Log("[Cmd 0] GetArbitraryValue result: 0x%08X\n", resp->value);        
+        //Logger::Log("[Cmd 0] GetArbitraryValue result: 0x%08X\n", resp->value);        
     }
     nn::sf::hipc::FinalizeHipcServiceResolution();
     //openOnlineManual();
